@@ -25,30 +25,30 @@ class Library
 
   def create_book(title, author)
     book = Book.new(title, author)
-    log_as :book, book
+    record_as :book, book
   end
 
   def create_author(name, biography = nil)
     author = Author.new(name, biography)
-    log_as :author, author
+    record_as :author, author
   end
 
   def create_reader(name, email = nil, city = nil, street = nil, house = nil)
     reader = Reader.new(name, email, city, street, house)
     reader.register_in(self)
-    log_as :reader, reader
+    record_as :reader, reader
   end
 
   def create_order(book, reader)
     order = Order.new(book, reader, DateTime.now)
-    log_as :order, order
+    record_as :order, order
   end
 
   private
 
-  def log_as(key, obj)
+  def record_as(key, obj)
     key = ('@' + key.to_s + 's').to_sym
-    throw Error.new("Wrong key #{key}") unless instance_variable_defined?(key)
+    raise ArgumentError, "Library doesn't have such attribute: #{key}" unless instance_variable_defined?(key)
     arr = instance_variable_get(key)
     arr << obj
     obj
@@ -114,6 +114,6 @@ class Reader
   private
 
   def handle_empty_library
-    throw Error.new("Reader #{@name} is now registered in any library")
+    raise "Reader #{@name} must be registered in library"
   end
 end

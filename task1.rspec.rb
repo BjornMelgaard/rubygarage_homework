@@ -37,25 +37,20 @@ describe 'Program' do
   end
 
   it 'determine who often takes the book' do
-    best_reader = library.readers
-      .sort_by { |r| library.orders.select { |o| o.reader == r }.size }
-      .last
+    best_reader = library.orders.group_by(&:reader).values.max_by(&:size).first.reader
     expect(best_reader).to eq(reader1)
   end
 
   it 'determine what is the most popular book' do
-    bestseller = library.books
-      .sort_by { |b| library.orders.select { |o| o.book == b }.size }
-      .last
+    bestseller = library.orders.group_by(&:book).values.max_by(&:size).first.book
     expect(bestseller).to eq(book1)
   end
 
   it 'determine how many people ordered one of the three most popular books' do
-    arr = library.books
-      .map { |b| [b, library.orders.select { |o| o.book == b }.map(&:reader).size] }
-      .sort_by(&:last)
-      .reverse
-      .take(3)
+    arr = library.orders
+      .group_by(&:book)
+      .map { |book, orders| [book, orders.size] }
+      .max_by(3) { |book, order_count| order_count }
 
     expect(arr[0]).to eq([book1, 3])
     expect(arr[1]).to eq([book0, 2])
