@@ -1,7 +1,7 @@
 #
 class Factory
   def self.new(*f_args, &block)
-    klass = Class.new do
+    Class.new do
       define_method :initialize do |*i_args|
         f_args.each_with_index { |name, i| instance_variable_set("@#{name}", i_args[i]) }
       end
@@ -15,8 +15,8 @@ class Factory
         param = instance_variables[param][1..-1] if param.is_a? Numeric
         instance_variable_get("@#{param}")
       end
+
+      class_eval(&block) if block_given?
     end
-    klass.class_eval(&block) if block_given?
-    klass
   end
 end
