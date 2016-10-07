@@ -55,52 +55,14 @@ class Library
   end
 end
 
-#
-class Order
-  attr_accessor :book, :reader, :date
+Order = Struct.new(:book, :reader, :date) { include InternalEquality }
+
+Book = Struct.new(:title, :author) { include InternalEquality }
+
+Author = Struct.new(:name, :biography) { include InternalEquality }
+
+Reader = Struct.new(:name, :email, :city, :street, :house) do
   include InternalEquality
-
-  def initialize(book, reader, date)
-    @book = book
-    @reader = reader
-    @date = date
-  end
-end
-
-#
-class Book
-  attr_accessor :title, :author
-  include InternalEquality
-
-  def initialize(title, author)
-    @title = title
-    @author = author
-  end
-end
-
-#
-class Author
-  attr_accessor :name, :biography
-  include InternalEquality
-
-  def initialize(name, biography)
-    @name = name
-    @biography = biography
-  end
-end
-
-#
-class Reader
-  attr_accessor :name, :email, :city, :street, :house
-  include InternalEquality
-
-  def initialize(name, email, city, street, house)
-    @name = name
-    @email = email
-    @city = city
-    @street = street
-    @house = house
-  end
 
   def register_in(library)
     @library = library
