@@ -1,0 +1,43 @@
+#!/usr/bin/env ruby
+$main_binding = b = binding
+$main_binding
+require_relative 'lib'
+require 'faker'
+
+puts 'First, I will create library for you with readers and books'
+
+library = Library.new
+
+author0 = library.create_author Faker::Book.author
+author1 = library.create_author Faker::Book.author
+author2 = library.create_author Faker::Book.author
+author3 = library.create_author Faker::Book.author
+author4 = library.create_author Faker::Book.author
+
+reader0 = library.create_reader Faker::Name.name
+reader1 = library.create_reader Faker::Name.name
+reader2 = library.create_reader Faker::Name.name
+reader3 = library.create_reader Faker::Name.name
+reader4 = library.create_reader Faker::Name.name
+
+book0   = library.create_book   Faker::Book.title, author0
+book1   = library.create_book   Faker::Book.title, author1
+book2   = library.create_book   Faker::Book.title, author2
+book3   = library.create_book   Faker::Book.title, author3
+book4   = library.create_book   Faker::Book.title, author4
+
+3.times { reader0.take(book0) }
+5.times { reader1.take(book1) }
+1.times { reader2.take(book2) }
+0.times { reader3.take(book3) }
+1.times { reader4.take(book4) }
+
+puts 'Lets see what we have'
+puts "    #{library.best_reader.name} is most often takes books"
+puts "    \"#{library.bestseller.title}\" is most popular book"
+puts "    3 most popular book has popularity: #{library.bestsellers_with_popularity(3).map(&:last).join(', ')}"
+
+puts 'Also I can save library to file and load from it'
+library.save
+other_lib = Library.load
+puts library == other_lib ? 'And they will be equal' : 'Unfortinatly, they not equal'

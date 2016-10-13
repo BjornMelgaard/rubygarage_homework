@@ -1,4 +1,4 @@
-require_relative 'task1'
+require_relative 'lib'
 require 'faker'
 
 describe Library do
@@ -37,20 +37,17 @@ describe 'Program' do
   end
 
   it 'determine who often takes the book' do
-    best_reader = library.orders.group_by(&:reader).values.max_by(&:size).first.reader
+    best_reader = library.best_reader
     expect(best_reader).to eq(reader1)
   end
 
   it 'determine what is the most popular book' do
-    bestseller = library.orders.group_by(&:book).values.max_by(&:size).first.book
+    bestseller = library.bestseller
     expect(bestseller).to eq(book1)
   end
 
   it 'determine how many people ordered one of the three most popular books' do
-    arr = library.orders
-      .group_by(&:book)
-      .map { |book, orders| [book, orders.size] }
-      .max_by(3) { |book, order_count| order_count }
+    arr = library.bestsellers_with_popularity(3)
 
     expect(arr[0]).to eq([book1, 3])
     expect(arr[1]).to eq([book0, 2])
@@ -58,11 +55,8 @@ describe 'Program' do
   end
 
   it 'save and restore all library data from file' do
-    File.open('library.file', 'wb') { |f| Marshal.dump(library, f) }
-
-    File.open('library.file', 'rb') do |f|
-      other_lib = Marshal.load(f)
-      expect(other_lib).to eq(library)
-    end
+    library.save
+    other_lib = Library.load
+    expect(other_lib).to eq(library)
   end
 end

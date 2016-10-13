@@ -1,5 +1,5 @@
 require 'date'
-
+require 'base64'
 #
 module InternalEquality
   def state
@@ -42,6 +42,33 @@ class Library
   def create_order(book, reader)
     order = Order.new(book, reader, DateTime.now)
     record_as :order, order
+  end
+
+  # program functionality
+
+  def best_reader
+    @orders.group_by(&:reader).values.max_by(&:size).first.reader
+  end
+
+  def bestseller
+    @orders.group_by(&:book).values.max_by(&:size).first.book
+  end
+
+  def bestsellers_with_popularity(size)
+    @orders
+      .group_by(&:book)
+      .map { |book, orders| [book, orders.size] }
+      .max_by(size) { |book, order_count| order_count }
+  end
+
+  def save(path = 'library.file')
+    encode = Base64.encode64(Marshal.dump(self))
+    File.open(path, 'wb') { |f| f.write(encode) }
+  end
+
+  def self.load(path = 'library.file')
+    content = File.read(path)
+    Marshal.load(Base64.decode64(content))
   end
 
   private
