@@ -1,20 +1,16 @@
+require_relative 'comparison_helper'
+require_relative 'author'
+require_relative 'book'
+require_relative 'order'
+require_relative 'reader'
+
 require 'date'
 require 'base64'
-#
-module InternalEquality
-  def state
-    instance_variables.map { |v| instance_variable_get(v) }
-  end
-
-  def ==(other)
-    other.class == self.class && other.state == state
-  end
-end
 
 # factory
 class Library
   attr_accessor :books, :orders, :readers, :authors
-  include InternalEquality
+  include ComparisonHelper
 
   def initialize
     @books = []
@@ -79,30 +75,5 @@ class Library
     arr = instance_variable_get(key)
     arr << obj
     obj
-  end
-end
-
-Order = Struct.new(:book, :reader, :date) { include InternalEquality }
-
-Book = Struct.new(:title, :author) { include InternalEquality }
-
-Author = Struct.new(:name, :biography) { include InternalEquality }
-
-Reader = Struct.new(:name, :email, :city, :street, :house) do
-  include InternalEquality
-
-  def register_in(library)
-    @library = library
-  end
-
-  def take(book)
-    handle_empty_library unless @library
-    @library.create_order(book, self)
-  end
-
-  private
-
-  def handle_empty_library
-    raise "Reader #{@name} must be registered in library"
   end
 end

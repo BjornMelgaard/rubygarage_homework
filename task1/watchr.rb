@@ -1,3 +1,3 @@
 watch('lib.*.rb') do |md|
-  system "rspec -c ./lib.rspec.rb"
+  system "rspec -c ./spec/lib.rspec.rb"
 end

@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 $main_binding = b = binding
 $main_binding
-require_relative 'lib'
+require_relative 'lib/library'
 require 'faker'
 
 puts 'First, I will create library for you with readers and books'
