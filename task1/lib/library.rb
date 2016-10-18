@@ -54,7 +54,7 @@ class Library
     @orders
       .group_by(&:book)
       .map { |book, orders| [book, orders.size] }
-      .max_by(size) { |book, order_count| order_count }
+      .max_by(size) { |_book, order_count| order_count }
   end
 
   def save(path = 'library.file')
