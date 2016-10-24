@@ -1,4 +1,4 @@
-require_relative 'task2'
+require_relative 'factory'
 
 describe Factory do
   after(:each) do

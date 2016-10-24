@@ -2,13 +2,10 @@
 class Factory
   def self.new(*f_args, &block)
     Class.new do
-      define_method :initialize do |*i_args|
-        f_args.each_with_index { |name, i| instance_variable_set("@#{name}", i_args[i]) }
-      end
+      attr_accessor(*f_args)
 
-      f_args.each do |arg|
-        class_eval("def #{arg};@#{arg};end") # getter
-        class_eval("def #{arg}=(val);@#{arg}=val;end") # setter
+      define_method :initialize do |*i_args|
+        f_args.zip(i_args).each { |(f_arg, i_arg)| send("#{f_arg}=", i_arg) }
       end
 
       def [](param)

@@ -1,3 +1,3 @@
-watch('lib.*.rb') do |md|
-  system "rspec -c ./lib.rspec.rb"
+watch('factory.*.rb') do |md|
+  system 'rspec -c ./factory.rspec.rb'
 end
