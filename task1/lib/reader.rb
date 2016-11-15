@@ -1,6 +1,6 @@
 class Reader
   attr_accessor :name, :email, :city, :street, :house
-  include ComparisonHelper
+  include EqualityByAttributes
 
   def initialize(name, email, city, street, house)
     @name = name

@@ -1,4 +1,4 @@
-require_relative 'comparison_helper'
+require_relative 'equality_by_attributes'
 require_relative 'author'
 require_relative 'book'
 require_relative 'order'
@@ -10,7 +10,7 @@ require 'base64'
 # factory
 class Library
   attr_accessor :books, :orders, :readers, :authors
-  include ComparisonHelper
+  include EqualityByAttributes
 
   def initialize
     @books = []
@@ -50,7 +50,7 @@ class Library
     @orders.group_by(&:book).values.max_by(&:size).first.book
   end
 
-  def bestsellers_with_popularity(size)
+  def books_with_popularity(size)
     @orders
       .group_by(&:book)
       .map { |book, orders| [book, orders.size] }

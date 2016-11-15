@@ -1,6 +1,6 @@
 class Order
   attr_accessor :book, :reader, :date
-  include ComparisonHelper
+  include EqualityByAttributes
 
   def initialize(book, reader, date)
     @book = book

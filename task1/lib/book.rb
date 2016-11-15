@@ -1,6 +1,6 @@
 class Book
   attr_accessor :title, :author
-  include ComparisonHelper
+  include EqualityByAttributes
 
   def initialize(title, author)
     @title = title

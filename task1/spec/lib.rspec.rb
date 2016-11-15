@@ -5,7 +5,7 @@ describe Library do
   let(:library) { Library.new }
   let(:author) { library.create_author(Faker::Book.author) }
   let(:reader) { library.create_reader(Faker::Name.name) }
-  let(:book) { library.create_book(Faker::Book.title, author) }
+  let(:book)   { library.create_book(Faker::Book.title, author) }
 
   it 'should have empty attributes on init' do
     expect(library.state.map(&:size)).to eq([0, 0, 0, 0])
@@ -47,7 +47,7 @@ describe 'Program' do
   end
 
   it 'determine how many people ordered one of the three most popular books' do
-    arr = library.bestsellers_with_popularity(3)
+    arr = library.books_with_popularity(3)
 
     expect(arr[0]).to eq([book1, 3])
     expect(arr[1]).to eq([book0, 2])
