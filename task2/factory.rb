@@ -1,4 +1,3 @@
-#
 class Factory
   def self.new(*f_args, &block)
     Class.new do
@@ -8,9 +7,9 @@ class Factory
         f_args.zip(i_args).each { |(f_arg, i_arg)| send("#{f_arg}=", i_arg) }
       end
 
-      def [](param)
-        param = instance_variables[param][1..-1] if param.is_a? Numeric
-        instance_variable_get("@#{param}")
+      define_method :[] do |param|
+        param = f_args[param] if param.is_a? Numeric
+        send(param)
       end
 
       class_eval(&block) if block_given?
