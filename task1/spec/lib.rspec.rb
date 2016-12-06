@@ -8,7 +8,7 @@ describe Library do
   let(:book)   { library.create_book(Faker::Book.title, author) }
 
   it 'should have empty attributes on init' do
-    expect(library.state.map(&:size)).to eq([0, 0, 0, 0])
+    expect(library.attributes.map(&:size)).to eq([0, 0, 0, 0])
   end
 
   it 'should log book orders' do
@@ -47,11 +47,11 @@ describe 'Program' do
   end
 
   it 'determine how many people ordered one of the three most popular books' do
-    arr = library.books_with_popularity(3)
+    arr = library.top_books(3)
 
-    expect(arr[0]).to eq([book1, 3])
-    expect(arr[1]).to eq([book0, 2])
-    expect(arr[2]).to eq([book2, 1])
+    expect(arr[0]).to eq(book1)
+    expect(arr[1]).to eq(book0)
+    expect(arr[2]).to eq(book2)
   end
 
   it 'save and restore all library data from file' do

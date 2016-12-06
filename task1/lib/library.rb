@@ -43,18 +43,18 @@ class Library
   # program functionality
 
   def best_reader
-    @orders.group_by(&:reader).values.max_by(&:size).first.reader
+    order_most_popular_attribute(:reader)
   end
 
   def bestseller
-    @orders.group_by(&:book).values.max_by(&:size).first.book
+    order_most_popular_attribute(:book)
   end
 
-  def books_with_popularity(size)
+  def top_books(size)
     @orders
       .group_by(&:book)
-      .map { |book, orders| [book, orders.size] }
-      .max_by(size) { |_book, order_count| order_count }
+      .max_by(size) { |_book, orders| orders.size }
+      .map(&:first)
   end
 
   def save(path = 'library.file')
@@ -68,6 +68,10 @@ class Library
   end
 
   private
+
+  def order_most_popular_attribute(attribute)
+    @orders.group_by(&attribute).values.max_by(&:size).first.send(attribute)
+  end
 
   def record_as(key, obj)
     key = ('@' + key.to_s + 's').to_sym

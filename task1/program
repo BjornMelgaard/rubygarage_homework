@@ -1,6 +1,4 @@
 #!/usr/bin/env ruby
-$main_binding = b = binding
-$main_binding
 require_relative 'lib/library'
 require 'faker'
 
@@ -23,9 +21,9 @@ end
 puts 'Lets see what we have'
 puts "    #{library.best_reader.name} is most often takes books"
 puts "    \"#{library.bestseller.title}\" is most popular book"
-puts "    3 most popular book has popularity: #{library.books_with_popularity(3).map(&:last).join(', ')}"
+puts "    3 most popular book titles: #{library.top_books(3).map(&:title).join(', ')}"
 
 puts 'Also I can save library to file and load from it'
 library.save
 other_lib = Library.load
-puts library == other_lib ? 'And they will be equal' : 'Unfortinatly, they not equal'
+puts library == other_lib ? 'And they will be equal' : 'Unfortunately, they are not equal'
