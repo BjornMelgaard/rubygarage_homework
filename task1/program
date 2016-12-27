@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+require_relative 'lib/library'
+require 'faker'
+
+puts 'First, I will create library for you with readers and books'
+
+library = Library.new
+
+5.times do |i|
+  tmp_author = instance_variable_set("@author#{i}", library.create_author(Faker::Book.author))
+  instance_variable_set("@reader#{i}", library.create_reader(Faker::Name.name))
+  instance_variable_set("@book#{i}",   library.create_book(Faker::Book.title, tmp_author))
+end
+
+3.times { @reader0.take(@book0) }
+5.times { @reader1.take(@book1) }
+1.times { @reader2.take(@book2) }
+0.times { @reader3.take(@book3) }
+1.times { @reader4.take(@book4) }
+
+puts 'Lets see what we have'
+puts "    #{library.best_reader.name} is most often takes books"
+puts "    \"#{library.bestseller.title}\" is most popular book"
+puts "    3 most popular book titles: #{library.top_books(3).map(&:title).join(', ')}"
+
+puts 'Also I can save library to file and load from it'
+library.save
+other_lib = Library.load
+puts library == other_lib ? 'And they will be equal' : 'Unfortunately, they are not equal'
